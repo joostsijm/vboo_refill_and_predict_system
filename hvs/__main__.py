@@ -8,7 +8,7 @@ from hvs import scheduler
 from hvs.app import download_resources, need_refill, refill, save_resources, print_resources
 
 
-def job_check_resources(state_id, resource_id, capital_id):
+def job_check_resources(state_id, capital_id, resource_id):
     """Check resources and refill if necessary"""
     regions = download_resources(state_id, resource_id)
     save_resources(state_id, regions)
@@ -27,23 +27,25 @@ def job_check_resources(state_id, resource_id, capital_id):
             scheduler.add_job(
                 job_refill_resource,
                 'date',
-                args=[4002, resource_id],
+                args=[state_id, capital_id, resource_id],
                 id=job_id,
                 run_date=scheduled_date
             )
 
-def job_refill_resource(capital_id, resource_id):
+def job_refill_resource(state_id, capital_id, resource_id):
     """Execute refill job"""
-    refill(capital_id, resource_id)
+    refill(state_id, capital_id, resource_id)
 
 if __name__ == '__main__':
     # jobs
+    # job_refill_resource(2788, 4002, 0)
+    # job_check_resources(2788, 4002, 0)
     VN_CHECK_GOLD_JOB = scheduler.get_job('vn_check_gold')
     if not VN_CHECK_GOLD_JOB:
         scheduler.add_job(
             job_check_resources,
             'cron',
-            args=[2788, 0, 4002],
+            args=[2788, 4002, 0],
             id='vn_check_gold',
             minute='0,15,30,45'
         )
@@ -52,7 +54,7 @@ if __name__ == '__main__':
         scheduler.add_job(
             job_check_resources,
             'cron',
-            args=[2788, 11, 4002],
+            args=[2788, 4002, 11],
             id='vn_check_uranium',
             minute='0'
         )
