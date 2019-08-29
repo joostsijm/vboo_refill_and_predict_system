@@ -11,7 +11,7 @@ from hvs.app import download_resources, need_refill, refill, save_resources, pri
 def job_check_resources(state_id, capital_id, resource_id):
     """Check resources and refill if necessary"""
     regions = download_resources(state_id, resource_id)
-    save_resources(state_id, regions)
+    save_resources(state_id, regions, resource_id)
     print_resources(regions)
     if need_refill(regions):
         random_time = timedelta(seconds=random.randint(0, 300))

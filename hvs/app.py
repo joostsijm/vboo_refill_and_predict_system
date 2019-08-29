@@ -128,11 +128,12 @@ def refill(state_id, capital_id, resource_id):
         print(result.text)
 
 
-def save_resources(state_id, regions):
+def save_resources(state_id, regions, resource_id):
     """Save resources to database"""
     session = Session()
     resource_track = ResourceTrack()
     resource_track.state_id = state_id
+    resource_track.resource_id = resource_id
     session.add(resource_track)
     session.commit()
 
