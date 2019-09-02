@@ -5,7 +5,8 @@ import random
 import time
 
 from hvs import scheduler
-from hvs.app import download_resources, need_refill, max_refill_seconds, refill, save_resources, print_resources
+from hvs.app import download_resources, need_refill, max_refill_seconds, refill, \
+    save_resources, print_resources
 
 
 def job_check_resources(state_id, capital_id, resource_id):
@@ -15,7 +16,8 @@ def job_check_resources(state_id, capital_id, resource_id):
     print_resources(regions)
     if need_refill(regions, 25):
         max_seconds = max_refill_seconds(regions, 25, 900) 
-        random_time = timedelta(seconds=random.randint(0, max_seconds))
+        random_seconds = random.randint(0, max_seconds)
+        random_time = timedelta(seconds=random_seconds)
         scheduled_date = datetime.now() + random_time
         job_id = 'refill_{}_{}'.format(capital_id, resource_id)
         print('refill resource: {} at {} ({} minutes)'.format(
