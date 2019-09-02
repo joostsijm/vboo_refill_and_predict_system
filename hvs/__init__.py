@@ -5,10 +5,9 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
+from apscheduler.schedulers.background import BackgroundScheduler
 
 from hvs.models import Base, Region, DeepExploration, ResourceTrack, ResourceStat
-
-from apscheduler.schedulers.background import BackgroundScheduler
 
 
 load_dotenv()

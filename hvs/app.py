@@ -85,7 +85,7 @@ def max_refill_seconds(regions, limit, max_time):
     for region in regions.values():
         percentage = 100 / region['maximum'] * region['explored']
         if percentage < lowest_percentage:
-            lowest_percentage = percentage 
+            lowest_percentage = percentage
     return max_time / limit * lowest_percentage
 
 

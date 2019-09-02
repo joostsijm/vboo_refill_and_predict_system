@@ -15,7 +15,7 @@ def job_check_resources(state_id, capital_id, resource_id):
     save_resources(state_id, regions, resource_id)
     print_resources(regions)
     if need_refill(regions, 25):
-        max_seconds = max_refill_seconds(regions, 25, 900) 
+        max_seconds = max_refill_seconds(regions, 25, 900)
         random_seconds = random.randint(0, max_seconds)
         random_time = timedelta(seconds=random_seconds)
         scheduled_date = datetime.now() + random_time
