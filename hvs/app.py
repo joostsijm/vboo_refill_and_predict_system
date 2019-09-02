@@ -70,13 +70,23 @@ def print_resources(regions):
         ))
 
 
-def need_refill(regions):
+def need_refill(regions, limit):
     """Check if refill is needed"""
     for region in regions.values():
         percentage = 100 / region['maximum'] * region['explored']
-        if percentage < 25 and region['limit_left']:
+        if percentage < limit and region['limit_left']:
             return True
     return False
+
+
+def max_refill_seconds(regions, limit, max_time):
+    """Give random seconds for next refill"""
+    lowest_percentage = limit
+    for region in regions.values():
+        percentage = 100 / region['maximum'] * region['explored']
+        if percentage < lowest_percentage:
+            lowest_percentage = percentage 
+    return max_time / limit * lowest_percentage
 
 
 def refill(state_id, capital_id, resource_id):
