@@ -23,7 +23,7 @@ def job_check_resources(state_id, capital_id, resource_id):
         print('refill resource: {} at {} ({} minutes)'.format(
             resource_id,
             scheduled_date,
-            round(random_time.seconds / 60)
+            round(random_time_delta.seconds / 60)
         ))
         job = scheduler.get_job(job_id)
         if not job:
