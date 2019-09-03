@@ -43,25 +43,21 @@ if __name__ == '__main__':
     # jobs
     # job_refill_resource(2788, 4002, 0)
     # job_check_resources(2788, 4002, 0)
-    VN_CHECK_GOLD_JOB = scheduler.get_job('vn_check_gold')
-    if VN_CHECK_GOLD_JOB:
-        VN_CHECK_GOLD_JOB.remove()
     scheduler.add_job(
         job_check_resources,
         'cron',
         args=[2788, 4002, 0],
         id='vn_check_gold',
+        replace_existing=True,
         minute='0,15,30,45'
     )
 
-    VN_CHECK_URANIUM_JOB = scheduler.get_job('vn_check_uranium')
-    if VN_CHECK_URANIUM_JOB:
-        VN_CHECK_URANIUM_JOB.remove()
     scheduler.add_job(
         job_check_resources,
         'cron',
         args=[2788, 4002, 11],
         id='vn_check_uranium',
+        replace_existing=True,
         minute='0'
     )
 
