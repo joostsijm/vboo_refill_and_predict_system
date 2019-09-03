@@ -86,7 +86,7 @@ def max_refill_seconds(regions, limit, max_time):
         percentage = 100 / region['maximum'] * region['explored']
         if percentage < lowest_percentage:
             lowest_percentage = percentage
-    return max_time / limit * lowest_percentage
+    return int(max_time / limit * lowest_percentage)
 
 
 def refill(state_id, capital_id, resource_id):
