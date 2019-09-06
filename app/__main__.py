@@ -55,9 +55,9 @@ def add_check_resources(state_id, capital_id, resource_id, do_refill, minute):
 if __name__ == '__main__':
     # jobs
     # job_refill_resource(2788, 4002, 0)
-    # job_check_resources(2788, 4002, 0)
+    # job_check_resources(2788, 4002, 0, True)
     add_check_resources(2788, 4003, 0, True, '0,15,30,45')
-    add_check_resources(2788, 4003, 6, True, '0')
+    add_check_resources(2788, 4003, 11, True, '0')
 
     while True:
         time.sleep(100)

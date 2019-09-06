@@ -96,4 +96,4 @@ def refill(state_id, capital_id, resource_id):
             '{}{}/pro'.format(BASE_URL, action),
             headers=HEADERS
         )
-        LOGGER.info('Response %s', result.text)
+        LOGGER.info('Response: %s', result.text)

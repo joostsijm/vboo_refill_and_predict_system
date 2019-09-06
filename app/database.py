@@ -9,12 +9,13 @@ def save_resources(state_id, regions, resource_id):
     session = Session()
     resource_track = ResourceTrack()
     resource_track.state_id = state_id
-    resource_track.resource_id = resource_id
+    resource_track.resource_type = resource_id
     session.add(resource_track)
     session.commit()
 
     for region_id, region in regions.items():
         resource_stat = ResourceStat()
+        resource_stat.resource_track_id = resource_track.id
         resource_stat.region_id = region_id
         resource_stat.explored = region['explored']
         resource_stat.deep_exploration = region['deep_exploration']
