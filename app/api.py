@@ -5,7 +5,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from app import BASE_URL, HEADERS
+from app import BASE_URL, HEADERS, LOGGER
 
 
 RESOURCES = {
@@ -62,7 +62,7 @@ def refill(state_id, capital_id, resource_id):
     state_div = soup.find_all('div', {'class': 'index_case_50'})[1]
     action = state_div.findChild()['action']
     current_state_id = int(re.sub('.*/', '', action))
-    print('Current state: {}'.format(current_state_id))
+    LOGGER.info('Current state %s', current_state_id)
 
     data = {
         'tmp_gov': resource_id
@@ -88,8 +88,7 @@ def refill(state_id, capital_id, resource_id):
     exploration_laws = active_laws.findAll(
         text='Resources exploration: state, {} resources'.format(resource_name)
     )
-    print('Resources exploration: state, {} resources'.format(resource_name))
-    print(exploration_laws)
+    LOGGER.info('Resources exploration: state, %s resources', resource_name)
     for exploration_law in exploration_laws:
         action = exploration_law.parent.parent['action']
         action = action.replace('law', 'votelaw')
@@ -97,4 +96,4 @@ def refill(state_id, capital_id, resource_id):
             '{}{}/pro'.format(BASE_URL, action),
             headers=HEADERS
         )
-        print(result.text)
+        LOGGER.info('Response %s', result.text)

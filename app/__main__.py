@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import random
 import time
 
-from app import scheduler
+from app import scheduler, LOGGER
 from app.api import download_resources, refill
 from app.database import save_resources
 from app.app import need_refill, max_refill_seconds, print_resources
@@ -21,11 +21,12 @@ def job_check_resources(state_id, capital_id, resource_id, do_refill):
         random_time_delta = timedelta(seconds=random_seconds)
         scheduled_date = datetime.now() + random_time_delta
         job_id = 'refill_{}_{}'.format(capital_id, resource_id)
-        print('refill resource: {} at {} ({} minutes)'.format(
+        LOGGER.info(
+            'Refil resource %s at %s (%s minutes)',
             resource_id,
             scheduled_date,
             round(random_time_delta.seconds / 60)
-        ))
+        )
         job = scheduler.get_job(job_id)
         if not job:
             scheduler.add_job(
