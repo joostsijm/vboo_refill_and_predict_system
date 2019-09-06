@@ -16,6 +16,7 @@ load_dotenv()
 # database
 engine = create_engine(os.environ["DATABASE_URI"])
 Session = sessionmaker(bind=engine)
+session = Session()
 
 # scheduler
 scheduler = BackgroundScheduler()

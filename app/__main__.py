@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import random
 import time
 
-from app import scheduler, LOGGER
+from app import scheduler, LOGGER, session
 from app.api import download_resources, refill
 from app.database import save_resources
 from app.app import need_refill, max_refill_seconds, print_resources
@@ -59,5 +59,10 @@ if __name__ == '__main__':
     add_check_resources(2788, 4003, 0, True, '0,15,30,45')
     add_check_resources(2788, 4003, 11, True, '0')
 
-    while True:
-        time.sleep(100)
+    try:
+        while True:
+            time.sleep(100)
+    except KeyboardInterrupt:
+        LOGGER.info('Exiting application')
+        session.close()
+        exit()
