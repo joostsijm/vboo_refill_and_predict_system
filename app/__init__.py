@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from hvs.models import Base, Region, DeepExploration, ResourceTrack, ResourceStat
+from app.models import Base, Region, DeepExploration, ResourceTrack, ResourceStat
 
 
 load_dotenv()
@@ -18,7 +18,6 @@ Session = sessionmaker(bind=engine)
 
 # scheduler
 scheduler = BackgroundScheduler()
-scheduler.add_jobstore('sqlalchemy', url=os.environ["DATABASE_URI"])
 scheduler.start()
 
 # api
