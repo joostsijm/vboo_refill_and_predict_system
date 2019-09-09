@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import random
 import time
 
-from app import scheduler, LOGGER, session
+from app import scheduler, LOGGER
 from app.api import download_resources, refill
 from app.database import save_resources
 from app.app import need_refill, max_refill_seconds, print_resources
@@ -64,5 +64,4 @@ if __name__ == '__main__':
             time.sleep(100)
     except KeyboardInterrupt:
         LOGGER.info('Exiting application')
-        session.close()
         exit()

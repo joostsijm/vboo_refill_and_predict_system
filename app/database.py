@@ -1,16 +1,16 @@
 """Main application"""
 
-from app import session
+from app import Session
 from app.models import ResourceTrack, ResourceStat
 
 
 def save_resources(state_id, regions, resource_id):
     """Save resources to database"""
+    session = Session()
     resource_track = ResourceTrack()
     resource_track.state_id = state_id
     resource_track.resource_type = resource_id
     session.add(resource_track)
-    session.commit()
 
     for region_id, region in regions.items():
         resource_stat = ResourceStat()
@@ -21,3 +21,4 @@ def save_resources(state_id, regions, resource_id):
         resource_stat.limit_left = region['limit_left']
         session.add(resource_stat)
     session.commit()
+    session.close()

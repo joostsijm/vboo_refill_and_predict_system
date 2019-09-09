@@ -24,12 +24,10 @@ def download_resources(state_id, resource_id):
     )
     return parse_resources(response.text)
 
-
 def read_resources():
     """Read resource file"""
     with open('resources.html') as file:
         return parse_resources(file)
-
 
 def parse_resources(html):
     """Read the resources left"""
@@ -49,7 +47,6 @@ def parse_resources(html):
             'limit_left': int(columns[5].string),
         }
     return regions
-
 
 def refill(state_id, capital_id, resource_id):
     """Main function"""
