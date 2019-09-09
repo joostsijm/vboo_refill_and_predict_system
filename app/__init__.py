@@ -1,4 +1,4 @@
-"""Init"""
+"""Hervul en Voorspel Systeem"""
 
 import os
 import logging
