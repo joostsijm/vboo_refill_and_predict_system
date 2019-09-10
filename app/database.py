@@ -11,6 +11,7 @@ def save_resources(state_id, regions, resource_id):
     resource_track.state_id = state_id
     resource_track.resource_type = resource_id
     session.add(resource_track)
+    session.commit()
 
     for region_id, region in regions.items():
         resource_stat = ResourceStat()
