@@ -61,7 +61,7 @@ def refill(state_id, capital_id, resource_id):
     current_state_id = int(re.sub('.*/', '', action))
     LOGGER.info('Current state %s', current_state_id)
 
-    data = {
+    json_data = {
         'tmp_gov': resource_id
     }
     params = {}
@@ -72,7 +72,7 @@ def refill(state_id, capital_id, resource_id):
         '{}parliament/donew/42/{}/0'.format(BASE_URL, resource_id),
         headers=HEADERS,
         params=params,
-        data=data
+        json=json_data
     )
 
     response = requests.get(
