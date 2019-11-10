@@ -58,8 +58,8 @@ if __name__ == '__main__':
     # job_check_resources(2620, 4002, 0, False) # Zeelandiae
 
     # VN
-    add_check_resources(2788, 4003, 0, True, '0,15,30,45')
-    add_check_resources(2788, 4003, 11, True, '0')
+    add_check_resources(2788, 4008, 0, True, '0,15,30,45')
+    add_check_resources(2788, 4008, 11, True, '0')
     # Zeelandiae
     add_check_resources(2620, 0, 0, False, '50')
     # Belgium
