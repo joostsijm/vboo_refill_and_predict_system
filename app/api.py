@@ -18,7 +18,7 @@ RESOURCES = {
 
 def download_resources(state_id, resource_id):
     """Download the resource list"""
-    return read_resources()
+    # return read_resources()
     response = requests.get(
         '{}listed/stateresources/{}/{}'.format(BASE_URL, state_id, RESOURCES[resource_id]),
         headers=HEADERS
