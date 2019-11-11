@@ -1,12 +1,12 @@
 """Main application"""
 
-from app import Session
+from app import SESSION
 from app.models import ResourceTrack, ResourceStat, Region
 
 
 def save_resources(state_id, regions, resource_id):
     """Save resources to database"""
-    session = Session()
+    session = SESSION()
     resource_track = ResourceTrack()
     resource_track.state_id = state_id
     resource_track.resource_type = resource_id
