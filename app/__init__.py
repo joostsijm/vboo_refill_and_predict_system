@@ -14,12 +14,12 @@ from app.models import Base, Region, DeepExploration, ResourceTrack, ResourceSta
 load_dotenv()
 
 # database
-engine = create_engine(os.environ["DATABASE_URI"])
-Session = sessionmaker(bind=engine)
+ENGINE = create_engine(os.environ["DATABASE_URI"])
+SESSION = sessionmaker(bind=ENGINE)
 
 # scheduler
-scheduler = BackgroundScheduler()
-scheduler.start()
+SCHEDULER = BackgroundScheduler()
+SCHEDULER.start()
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
