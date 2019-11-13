@@ -1,5 +1,10 @@
 """Main application"""
 
+from datetime import datetime, timedelta, timezone
+
+from sqlalchemy import or_, and_
+from sqlalchemy.orm import joinedload
+
 from app import SESSION
 from app.models import ResourceTrack, ResourceStat, Region
 
@@ -10,6 +15,7 @@ def save_resources(state_id, regions, resource_id):
     resource_track = ResourceTrack()
     resource_track.state_id = state_id
     resource_track.resource_type = resource_id
+    resource_track.date_time = datetime.now()
     session.add(resource_track)
     session.commit()
 
@@ -36,3 +42,42 @@ def save_region(session, region_id, region_dict):
     region.name = region_dict['region_name']
     session.add(region)
     return region
+
+def get_resources(region_id, date, resource_type):
+    """Get resources on a date"""
+    end_date_time = date.replace(hour=18, minute=0, second=0, microsecond=0)
+    start_date_time = end_date_time - timedelta(1)
+    session = SESSION()
+    resource = {}
+    resource_stats = session.query(ResourceStat) \
+        .options(joinedload(ResourceStat.resource_track)) \
+        .join(ResourceStat.resource_track) \
+        .filter(ResourceStat.region_id == region_id) \
+        .filter(ResourceTrack.resource_type == resource_type) \
+        .filter(ResourceTrack.date_time >= start_date_time) \
+        .filter(ResourceTrack.date_time <= end_date_time) \
+        .all()
+    start_limit = resource_stats[0].explored
+    for resource_stat in resource_stats:
+        time = resource_stat.resource_track.date_time
+        resource[time] = resource_stat.explored + resource_stat.limit_left
+    session.close()
+    new_resource = {}
+    for time, amount in resource.items():
+        new_time = time.replace(tzinfo=timezone.utc).astimezone(tz=None) + timedelta(hours=1)
+        new_resource[new_time] = amount - start_limit
+    return new_resource
+
+
+def get_state_regions(state_id):
+    """Get regions from state"""
+    session = SESSION()
+    state_regions = session.query(StateRegion) \
+        .filter(and_(StateRegion.state_id == state_id, StateRegion.until_date_time == None)) \
+        .all()
+    regions = []
+    for state_region in state_regions:
+        regions.append(state_region.region)
+    session.close()
+    return regions
+
