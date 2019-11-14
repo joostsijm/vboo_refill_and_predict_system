@@ -12,9 +12,11 @@ import pandas as pd
 
 from pandas.plotting import register_matplotlib_converters
 
-from app import SCHEDULER, LOGGER
+from telegram import ParseMode
+
+from app import SCHEDULER, LOGGER, TELEGRAM_BOT
 from app.api import download_resources, refill
-from app.database import save_resources, get_resources
+from app.database import save_resources, get_resources, get_work_percentage
 from app.app import need_refill, max_refill_seconds, print_resources
 
 
@@ -62,9 +64,21 @@ def add_check_resources(state_id, capital_id, resource_id, do_refill, minute):
         minute=minute
     )
 
+def job_send_telegram_update(state_id, group_id, resource_type):
+    """Send telegram update"""
+    data = get_work_percentage(state_id, resource_type, datetime.utcnow(), 1, 3)
+    print(data)
+    exit()
+    TELEGRAM_BOT.sendMessage(
+        chat_id=group_id, 
+        text='*test*',
+        parse_mode=ParseMode.MARKDOWN
+    )
+
+
 def graph():
     """make graph"""
-    date = datetime.now()  - timedelta(1)
+    date = datetime.now()# - timedelta(1)
     region_4001 = get_resources(4001, date, 0)
     region_4002 = get_resources(4002, date, 0)
     region_4003 = get_resources(4003, date, 0)
@@ -92,6 +106,7 @@ def graph():
     end_date_time = date.replace(hour=20, minute=0, second=0, microsecond=0)
     start_date_time = end_date_time - timedelta(hours=26)
     ax.set_xlim([start_date_time, end_date_time])
+    ax.set_ylim([0, 2500])
 
     # style
     plt.style.use('seaborn-darkgrid')
@@ -133,7 +148,8 @@ if __name__ == '__main__':
     # job_refill_resource(2788, 4002, 0)
     # job_check_resources(2788, 4002, 0, False) # VN
     # job_check_resources(2620, 4002, 0, False) # Zeelandiae
-    graph()
+    # graph()
+    job_send_telegram_update(2788, '@vn_resources', 0)
     # get_resources(4001, datetime.now(), 0)
     exit()
 

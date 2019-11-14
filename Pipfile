@@ -12,6 +12,7 @@ sqlalchemy = "*"
 python-dotenv = "*"
 psycopg2-binary = "*"
 apscheduler = "*"
+python-telegram-bot = "*"
 matplotlib = "*"
 pandas = "*"
 

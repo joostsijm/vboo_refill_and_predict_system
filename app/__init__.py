@@ -3,6 +3,7 @@
 import os
 import logging
 
+import telegram
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
@@ -12,6 +13,9 @@ from app.models import Base, Region, DeepExploration, ResourceTrack, ResourceSta
 
 
 load_dotenv()
+
+# Telegram
+TELEGRAM_BOT = telegram.Bot(os.environ['TELEGRAM_KEY'])
 
 # database
 ENGINE = create_engine(os.environ["DATABASE_URI"])

@@ -68,6 +68,10 @@ class ResourceStat(Base):
         backref=backref("resource_stats", lazy="dynamic")
     )
 
+    def total(self):
+        """total left"""
+        return self.limit_left + self.explored
+
 
 class State(Base):
     """Model for state"""

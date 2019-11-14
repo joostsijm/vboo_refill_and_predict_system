@@ -8,6 +8,10 @@ from sqlalchemy.orm import joinedload
 from app import SESSION
 from app.models import ResourceTrack, ResourceStat, Region
 
+import pprint
+
+
+print = pprint.PrettyPrinter().pprint
 
 def save_resources(state_id, regions, resource_id):
     """Save resources to database"""
@@ -81,3 +85,84 @@ def get_state_regions(state_id):
     session.close()
     return regions
 
+def _get_state_stat(session, state_id, resource_type, date_time):
+    """Get state stats from date"""
+    ten_minutes = timedelta(minutes=10)
+    stats = session.query(ResourceStat) \
+        .options(joinedload(ResourceStat.resource_track), joinedload(ResourceStat.region)) \
+        .join(ResourceStat.resource_track) \
+        .filter(ResourceTrack.state_id == state_id) \
+        .filter(ResourceTrack.resource_type == resource_type) \
+        .filter(ResourceTrack.date_time >= date_time - ten_minutes) \
+        .filter(ResourceTrack.date_time <= date_time + ten_minutes) \
+        .all()
+    stats_dict = {}
+    for stat in stats:
+        stats_dict[stat.region_id] = stat
+    return stats_dict
+
+def get_work_percentage(state_id, resource_type, end_date_time, hours, times):
+    """Get work percentage for state in last x hours"""
+    end_date_time = end_date_time.replace(minute=0, second=0, microsecond=0)
+    reset_date_time = end_date_time
+    if reset_date_time.hour >= 18:
+        reset_date_time = reset_date_time.replace(hour=18) + timedelta(1)
+    else:
+        reset_date_time = reset_date_time.replace(hour=18)
+
+    session = SESSION()
+    data = {
+        0: {
+            'date': end_date_time,
+            'stats': _get_state_stat(session, state_id, resource_type, end_date_time)
+        }
+    }
+    for i in range(times, 0, -1):
+        current_date_time = end_date_time - timedelta(hours=hours*i)
+        data[i] = {
+            'date': current_date_time,
+            'stats': _get_state_stat(session, state_id, resource_type, current_date_time)
+        }
+    session.close()
+
+    print(data)
+
+    for i in range(0, times):
+        data[i]['progress'] = {}
+        time_left = reset_date_time - data[i+1]['date']
+        print('{} time left: {} uur'.format(data[i]['date'], time_left.seconds // 3600))
+        for region_id, stat in data[i]['stats'].items():
+            mined = data[i+1]['stats'][stat.region_id].total() - stat.total()
+            required = stat.total() / (time_left.seconds / (hours * 3600))
+            percentage = mined / required * 100 - 100
+            print('{:4} left: {:3} mined: {:3} required: {:6.2f} percentage: {:6.2f}'.format(
+                stat.region_id, stat.total(), mined, required, percentage
+            ))
+            data[i]['progress'][stat.region_id] = percentage
+        print('test')
+
+    for date in data.values():
+        # print(date)
+        print(' ')
+        if 'progress' in date:
+            for region_id, progress in date['progress'].items():
+                print('{}: {:6.2f}'.format(
+                    region_id,
+                    progress
+                ))
+
+    exit()
+
+    for i, stats in data:
+        data[stat.region_id] = {
+            'name': stat.region.name,
+            'start_resource_left': stat.limit_left + stat.explored
+        }
+    for stat in end_resource_stats:
+        data[stat.region_id]['end_resources_left'] = stat.limit_left + stat.explored
+
+    for region_id, region in data.items():
+        print(region_id)
+        print(region)
+
+    return data
