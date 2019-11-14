@@ -1,5 +1,7 @@
 """Main application"""
 
+from datetime import datetime
+
 from app import SESSION
 from app.models import ResourceTrack, ResourceStat, Region
 
@@ -10,6 +12,7 @@ def save_resources(state_id, regions, resource_id):
     resource_track = ResourceTrack()
     resource_track.state_id = state_id
     resource_track.resource_type = resource_id
+    resource_track.date_time = datetime.now()
     session.add(resource_track)
     session.commit()
 
