@@ -22,11 +22,11 @@ ENGINE = create_engine(os.environ["DATABASE_URI"])
 SESSION = sessionmaker(bind=ENGINE)
 
 # scheduler
-scheduler = BackgroundScheduler(
+SCHEDULER = BackgroundScheduler(
     daemon=True,
     job_defaults={'misfire_grace_time': 300},
 )
-scheduler.start()
+SCHEDULER.start()
 
 # get logger
 LOGGER = logging.getLogger(__name__)
