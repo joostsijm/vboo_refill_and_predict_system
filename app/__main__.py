@@ -7,7 +7,6 @@ import time
 # libraries and data
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-import numpy as np
 import pandas as pd
 
 from pandas.plotting import register_matplotlib_converters
@@ -66,19 +65,18 @@ def add_check_resources(state_id, capital_id, resource_id, do_refill, minute):
 
 def job_send_telegram_update(state_id, group_id, resource_type):
     """Send telegram update"""
-    data = get_work_percentage(state_id, resource_type, datetime.utcnow(), 1, 3)
-    print(data)
-    exit()
+    message = get_work_percentage(state_id, resource_type, datetime.utcnow(), 1, 1)
+    print(message)
     TELEGRAM_BOT.sendMessage(
-        chat_id=group_id, 
-        text='*test*',
+        chat_id=group_id,
+        text='```\n{}```'.format(message),
         parse_mode=ParseMode.MARKDOWN
     )
 
 
 def graph():
     """make graph"""
-    date = datetime.now()# - timedelta(1)
+    date = datetime.now() + timedelta(1)
     region_4001 = get_resources(4001, date, 0)
     region_4002 = get_resources(4002, date, 0)
     region_4003 = get_resources(4003, date, 0)
@@ -103,8 +101,8 @@ def graph():
     fig, ax = plt.subplots()
     ax.xaxis.set_major_formatter(major_fmt)
     fig.autofmt_xdate()
-    end_date_time = date.replace(hour=20, minute=0, second=0, microsecond=0)
-    start_date_time = end_date_time - timedelta(hours=26)
+    end_date_time = date.replace(hour=19, minute=0, second=0, microsecond=0)
+    start_date_time = end_date_time - timedelta(hours=24)
     ax.set_xlim([start_date_time, end_date_time])
     ax.set_ylim([0, 2500])
 
@@ -149,17 +147,24 @@ if __name__ == '__main__':
     # job_check_resources(2788, 4002, 0, False) # VN
     # job_check_resources(2620, 4002, 0, False) # Zeelandiae
     # graph()
-    job_send_telegram_update(2788, '@vn_resources', 0)
     # get_resources(4001, datetime.now(), 0)
-    exit()
 
     # VN
-    # add_check_resources(2788, 4008, 0, True, '0,15,30,45')
-    # add_check_resources(2788, 4008, 11, True, '0')
+    add_check_resources(2788, 4008, 0, True, '0,15,30,45')
+    add_check_resources(2788, 4008, 11, True, '0')
     # Zeelandiae
-    # add_check_resources(2620, 0, 0, False, '50')
+    add_check_resources(2620, 0, 0, False, '50')
     # Belgium
-    # add_check_resources(2604, 0, 0, False, '40')
+    add_check_resources(2604, 0, 0, False, '40')
+
+    SCHEDULER.add_job(
+        job_send_telegram_update,
+        'cron',
+        args=[2788, '@vn_resources', 0],
+        id='job_send_telegram_update',
+        replace_existing=True,
+        minute='5'
+    )
 
     try:
         while True:
@@ -167,4 +172,4 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         LOGGER.info('Exiting application')
         SCHEDULER.shutdown()
-        exit
+        exit()
