@@ -21,6 +21,13 @@ TELEGRAM_BOT = telegram.Bot(os.environ['TELEGRAM_KEY'])
 ENGINE = create_engine(os.environ["DATABASE_URI"])
 SESSION = sessionmaker(bind=ENGINE)
 
+# scheduler
+scheduler = BackgroundScheduler(
+    daemon=True,
+    job_defaults={'misfire_grace_time': 300},
+)
+scheduler.start()
+
 # get logger
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
