@@ -76,7 +76,7 @@ def job_send_telegram_update(state_id, group_id, resource_type):
 
 def graph():
     """make graph"""
-    date = datetime.now() + timedelta(1)
+    date = datetime.now()# + timedelta(1)
     region_4001 = get_resources(4001, date, 0)
     region_4002 = get_resources(4002, date, 0)
     region_4003 = get_resources(4003, date, 0)
@@ -104,7 +104,7 @@ def graph():
     end_date_time = date.replace(hour=19, minute=0, second=0, microsecond=0)
     start_date_time = end_date_time - timedelta(hours=24)
     ax.set_xlim([start_date_time, end_date_time])
-    ax.set_ylim([0, 2500])
+    ax.set_ylim([0, 2700])
 
     # style
     plt.style.use('seaborn-darkgrid')
@@ -146,7 +146,8 @@ if __name__ == '__main__':
     # job_refill_resource(2788, 4002, 0)
     # job_check_resources(2788, 4002, 0, False) # VN
     # job_check_resources(2620, 4002, 0, False) # Zeelandiae
-    # graph()
+    graph()
+    exit()
     # get_resources(4001, datetime.now(), 0)
 
     # VN

@@ -44,7 +44,7 @@ def save_region(session, region_id, region_dict):
 
 def get_resources(region_id, date, resource_type):
     """Get resources on a date"""
-    end_date_time = date.replace(hour=18, minute=0, second=0, microsecond=0)
+    end_date_time = date.replace(hour=19, minute=0, second=0, microsecond=0)
     start_date_time = end_date_time - timedelta(1)
     session = SESSION()
     resource = {}
@@ -55,17 +55,13 @@ def get_resources(region_id, date, resource_type):
         .filter(ResourceTrack.resource_type == resource_type) \
         .filter(ResourceTrack.date_time >= start_date_time) \
         .filter(ResourceTrack.date_time <= end_date_time) \
+        .order_by(ResourceTrack.date_time.desc()) \
         .all()
-    start_limit = resource_stats[0].explored
     for resource_stat in resource_stats:
         time = resource_stat.resource_track.date_time
         resource[time] = resource_stat.explored + resource_stat.limit_left
     session.close()
-    new_resource = {}
-    for time, amount in resource.items():
-        new_time = time.replace(tzinfo=timezone.utc).astimezone(tz=None) + timedelta(hours=1)
-        new_resource[new_time] = amount - start_limit
-    return new_resource
+    return resource
 
 
 def _get_state_stat(session, state_id, resource_type, date_time):
@@ -110,10 +106,10 @@ def get_work_percentage(state_id, resource_type, end_date_time, hours, times):
     for i in range(0, times):
         data[i]['progress'] = {}
         reset_date_time = data[i+1]['date']
-        if reset_date_time.hour >= 18:
-            reset_date_time = reset_date_time.replace(hour=18) + timedelta(1)
+        if reset_date_time.hour >= 19:
+            reset_date_time = reset_date_time.replace(hour=19) + timedelta(1)
         else:
-            reset_date_time = reset_date_time.replace(hour=18)
+            reset_date_time = reset_date_time.replace(hour=19)
         time_left = reset_date_time - data[i]['date']
         if time_left.seconds != 0:
             seconds_left = time_left.seconds
