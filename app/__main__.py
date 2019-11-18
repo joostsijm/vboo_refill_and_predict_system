@@ -76,7 +76,7 @@ def job_send_telegram_update(state_id, group_id, resource_type):
 
 def graph():
     """make graph"""
-    date = datetime.now()# + timedelta(1)
+    date = datetime.now()# - timedelta(1)
     region_4001 = get_resources(4001, date, 0)
     region_4002 = get_resources(4002, date, 0)
     region_4003 = get_resources(4003, date, 0)
@@ -146,9 +146,9 @@ if __name__ == '__main__':
     # job_refill_resource(2788, 4002, 0)
     # job_check_resources(2788, 4002, 0, False) # VN
     # job_check_resources(2620, 4002, 0, False) # Zeelandiae
+    # get_resources(4001, datetime.now(), 0)
     graph()
     exit()
-    # get_resources(4001, datetime.now(), 0)
 
     # VN
     add_check_resources(2788, 4008, 0, True, '0,15,30,45')
