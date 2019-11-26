@@ -10,7 +10,7 @@ from app import BASE_URL, HEADERS, LOGGER
 
 RESOURCES = {
     0: 'gold',
-    2: 'oil',
+    3: 'oil',
     4: 'ore',
     11: 'uranium',
     15: 'diamond',
