@@ -18,6 +18,7 @@ RESOURCES = {
 
 def download_resources(state_id, resource_id):
     """Download the resource list"""
+    # return read_resources()
     response = requests.get(
         '{}listed/stateresources/{}/{}'.format(BASE_URL, state_id, RESOURCES[resource_id]),
         headers=HEADERS
@@ -40,7 +41,7 @@ def parse_resources(html):
         region_id = int(region_tree['user'])
         columns = region_tree.find_all('td')
         regions[region_id] = {
-            'name': re.sub('Factories: .*$', '', columns[1].text),
+            'region_name': re.sub('Factories: .*$', '', columns[1].text),
             'explored': float(columns[2].string),
             'maximum': int(float(columns[3].string)),
             'deep_exploration': int(columns[4].string),
@@ -61,7 +62,7 @@ def refill(state_id, capital_id, resource_id):
     current_state_id = int(re.sub('.*/', '', action))
     LOGGER.info('Current state %s', current_state_id)
 
-    data = {
+    json_data = {
         'tmp_gov': resource_id
     }
     params = {}
@@ -72,7 +73,7 @@ def refill(state_id, capital_id, resource_id):
         '{}parliament/donew/42/{}/0'.format(BASE_URL, resource_id),
         headers=HEADERS,
         params=params,
-        data=data
+        json=json_data
     )
 
     response = requests.get(

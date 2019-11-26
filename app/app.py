@@ -9,7 +9,7 @@ def print_resources(regions):
         region['total_percentage'] = 100 / 2500 * region['total_left']
 
         print('{:25}: {:7.2f}{:4}{:4}{:5}{:7.2f}{:7.2f}'.format(
-            region['name'],
+            region['region_name'],
             region['explored'],
             region['maximum'],
             region['deep_exploration'],
