@@ -35,7 +35,7 @@ SCHEDULER_LOGGER = logging.getLogger('apscheduler')
 SCHEDULER_LOGGER.setLevel(logging.DEBUG)
 
 # create file handler
-FILE_HANDLER = logging.FileHandler('irlt.log')
+FILE_HANDLER = logging.FileHandler('output.log')
 FILE_HANDLER.setLevel(logging.DEBUG)
 
 # create console handler
