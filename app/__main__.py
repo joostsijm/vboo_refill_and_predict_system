@@ -3,11 +3,12 @@
 import time
 import sys
 
-from app import SCHEDULER, LOGGER, jobs
+from app import SCHEDULER, LOGGER, RESOURCE_NAMES, job_storage, jobs
 
 
 def add_check_resources(state_id, capital_id, resource_id, do_refill, minute):
     """Add check resources job"""
+    LOGGER.info('Add check for "%s", resource "%s" at "%s"', state_id, resource_id, minute)
     SCHEDULER.add_job(
         jobs.check_resources,
         'cron',
@@ -24,13 +25,15 @@ if __name__ == '__main__':
     # graph()
     # get_resources(4001, datetime.now(), 0)
 
-    # VN
-    add_check_resources(2788, 4008, 0, True, '0,15,30,45')
-    add_check_resources(2788, 4008, 11, True, '0')
-    # Zeelandiae
-    add_check_resources(2620, 0, 0, False, '50')
-    # Belgium
-    add_check_resources(2604, 0, 0, False, '40')
+    JOBS = job_storage.get_jobs()
+    for job in JOBS:
+        add_check_resources(
+            job['state_id'],
+            job['capital_id'],
+            RESOURCE_NAMES[job['resource_type']],
+            job['refill'],
+            job['minutes']
+        )
 
     SCHEDULER.add_job(
         jobs.send_telegram_update,

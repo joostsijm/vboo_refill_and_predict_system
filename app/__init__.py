@@ -58,3 +58,19 @@ BASE_URL = os.environ["API_URL"]
 HEADERS = {
     'Authorization': os.environ["AUTHORIZATION"]
 }
+
+RESOURCE_IDS = {
+    0: 'gold',
+    2: 'oil',
+    4: 'ore',
+    11: 'uranium',
+    15: 'diamond',
+}
+
+RESOURCE_NAMES = {
+    'gold': 0,
+    'oil': 2,
+    'ore': 4,
+    'uranium': 11,
+    'diamond': 15,
+}

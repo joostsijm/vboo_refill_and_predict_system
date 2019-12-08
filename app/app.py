@@ -13,8 +13,8 @@ from telegram import ParseMode
 
 from app import LOGGER, SCHEDULER, TELEGRAM_BOT, jobs, api, database
 
-register_matplotlib_converters()
 
+register_matplotlib_converters()
 
 def check_resources(state_id, capital_id, resource_id, do_refill):
     """Check resources and refill if necessary"""

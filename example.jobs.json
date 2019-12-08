@@ -1,0 +1,9 @@
+[
+    {
+        "state_id": 2788, 
+        "capital_id": 4008,
+        "resource_type": "gold",
+        "refill": true,
+        "minutes": "0,15,30,45"
+    }
+]

@@ -5,16 +5,8 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from app import BASE_URL, HEADERS, LOGGER
+from app import BASE_URL, HEADERS, LOGGER, RESOURCE_IDS
 
-
-RESOURCES = {
-    0: 'gold',
-    2: 'oil',
-    4: 'ore',
-    11: 'uranium',
-    15: 'diamond',
-}
 
 def download_resources(state_id, resource_id):
     """Download the resource list"""
@@ -82,7 +74,7 @@ def refill(state_id, capital_id, resource_id):
     )
     soup = BeautifulSoup(response.text, 'html.parser')
     active_laws = soup.find('div', {'id': 'parliament_active_laws'})
-    resource_name = RESOURCES[resource_id]
+    resource_name = RESOURCE_IDS[resource_id]
     exploration_laws = active_laws.findAll(
         text='Resources exploration: state, {} resources'.format(resource_name)
     )
