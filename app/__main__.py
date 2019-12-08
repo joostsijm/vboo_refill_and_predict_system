@@ -8,7 +8,7 @@ from app import SCHEDULER, LOGGER, RESOURCE_NAMES, job_storage, jobs
 
 if __name__ == '__main__':
     # jobs.refill_resource(2788, 4002, 0)
-    # jobs.check_resources(2788, 4002, 0, False) # VN
+    # jobs.check_resources(2788, 4002, 0, True) # VN
     # jobs.check_resources(2620, 4002, 0, False) # Zeelandiae
     # graph()
     # get_resources(4001, datetime.now(), 0)
@@ -18,8 +18,8 @@ if __name__ == '__main__':
         LOGGER.info(
             'Add check for "%s", resource "%s" at "%s"',
             job['state_id'],
-            job['resource_id'],
-            job['minute']
+            job['resource_type'],
+            job['minutes']
         )
         SCHEDULER.add_job(
             jobs.check_resources,
