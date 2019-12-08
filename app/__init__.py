@@ -35,7 +35,7 @@ SCHEDULER_LOGGER = logging.getLogger('apscheduler')
 SCHEDULER_LOGGER.setLevel(logging.DEBUG)
 
 # create file handler
-FILE_HANDLER = logging.FileHandler('irlt.log')
+FILE_HANDLER = logging.FileHandler('output.log')
 FILE_HANDLER.setLevel(logging.DEBUG)
 
 # create console handler
@@ -61,7 +61,7 @@ HEADERS = {
 
 RESOURCE_IDS = {
     0: 'gold',
-    2: 'oil',
+    3: 'oil',
     4: 'ore',
     11: 'uranium',
     15: 'diamond',
@@ -69,7 +69,7 @@ RESOURCE_IDS = {
 
 RESOURCE_NAMES = {
     'gold': 0,
-    'oil': 2,
+    'oil': 3,
     'ore': 4,
     'uranium': 11,
     'diamond': 15,

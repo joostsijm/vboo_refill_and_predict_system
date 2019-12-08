@@ -12,7 +12,7 @@ def download_resources(state_id, resource_id):
     """Download the resource list"""
     # return read_resources()
     response = requests.get(
-        '{}listed/stateresources/{}/{}'.format(BASE_URL, state_id, RESOURCES[resource_id]),
+        '{}listed/stateresources/{}/{}'.format(BASE_URL, state_id, RESOURCE_IDS[resource_id]),
         headers=HEADERS
     )
     return parse_resources(response.text)
