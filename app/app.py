@@ -20,9 +20,10 @@ def check_resources(state_id, capital_id, resource_id, do_refill):
     """Check resources and refill if necessary"""
     regions = api.download_resources(state_id, resource_id)
     print_resources(regions)
+    refill_percentage = 25
     database.save_resources(state_id, regions, resource_id)
-    if do_refill and need_refill(regions, 25):
-        max_seconds = max_refill_seconds(regions, 25, 900)
+    if do_refill and need_refill(regions, refill_percentage):
+        max_seconds = max_refill_seconds(regions, refill_percentage, 900)
         random_seconds = random.randint(0, max_seconds)
         random_time_delta = timedelta(seconds=random_seconds)
         scheduled_date = datetime.now() + random_time_delta
