@@ -44,7 +44,7 @@ def save_region(session, region_id, region_dict):
 
 def get_resources(region_id, date, resource_type):
     """Get resources on a date"""
-    end_date_time = date.replace(hour=18, minute=0, second=0, microsecond=0)
+    end_date_time = date.replace(hour=19, minute=0, second=0, microsecond=0)
     start_date_time = end_date_time - timedelta(1)
     session = SESSION()
     resource = {}
@@ -55,6 +55,7 @@ def get_resources(region_id, date, resource_type):
         .filter(ResourceTrack.resource_type == resource_type) \
         .filter(ResourceTrack.date_time >= start_date_time) \
         .filter(ResourceTrack.date_time <= end_date_time) \
+        .order_by(ResourceTrack.date_time.desc()) \
         .all()
     start_limit = resource_stats[0].explored
     for resource_stat in resource_stats:
@@ -110,10 +111,10 @@ def get_work_percentage(state_id, resource_type, end_date_time, hours, times):
     for i in range(0, times):
         data[i]['progress'] = {}
         reset_date_time = data[i+1]['date']
-        if reset_date_time.hour >= 18:
-            reset_date_time = reset_date_time.replace(hour=18) + timedelta(1)
+        if reset_date_time.hour >= 19:
+            reset_date_time = reset_date_time.replace(hour=19) + timedelta(1)
         else:
-            reset_date_time = reset_date_time.replace(hour=18)
+            reset_date_time = reset_date_time.replace(hour=19)
         time_left = reset_date_time - data[i]['date']
         if time_left.seconds != 0:
             seconds_left = time_left.seconds
@@ -138,10 +139,11 @@ def get_work_percentage(state_id, resource_type, end_date_time, hours, times):
             data[i]['progress'][stat.region_id] = percentage
 
     message_text = ''
+    message_text += '{:21}: {:9}\n'.format('region', 'workers')
     for date in data.values():
         if 'progress' in date:
             for region_id, progress in sorted(date['progress'].items(), key=lambda x: x[1]):
-                message_text += '{:21}: {:6.2f}\n'.format(
+                message_text += '{:21}: {:7.2f}\n'.format(
                     regions[region_id],
                     progress
                 )

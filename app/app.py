@@ -83,7 +83,7 @@ def max_refill_seconds(regions, limit, max_time):
 
 def send_telegram_update(state_id, group_id, resource_type):
     """Send mine update to telegram"""
-    message = database.get_work_percentage(state_id, resource_type, datetime.utcnow(), 1, 1)
+    message = database.get_work_percentage(state_id, resource_type, datetime.now(), 1, 1)
     if message:
         print(message)
         TELEGRAM_BOT.sendMessage(
@@ -96,7 +96,7 @@ def send_telegram_update(state_id, group_id, resource_type):
 
 def graph():
     """make graph"""
-    date = datetime.now() + timedelta(1)
+    date = datetime.now() # - timedelta(1)
     region_4001 = database.get_resources(4001, date, 0)
     region_4002 = database.get_resources(4002, date, 0)
     region_4003 = database.get_resources(4003, date, 0)

@@ -10,8 +10,10 @@ if __name__ == '__main__':
     # jobs.refill_resource(2788, 4002, 0)
     # jobs.check_resources(2788, 4002, 0, True) # VN
     # jobs.check_resources(2620, 4002, 0, False) # Zeelandiae
-    # graph()
+    # app.graph()
     # get_resources(4001, datetime.now(), 0)
+    # jobs.send_telegram_update(2788, '@vn_resources', 0)
+    # sys.exit()
 
     JOBS = job_storage.get_jobs()
     for job in JOBS:
