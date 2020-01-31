@@ -74,3 +74,11 @@ RESOURCE_NAMES = {
     'uranium': 11,
     'diamond': 15,
 }
+
+RESOURCE_MAX = {
+    0: 2500,
+    3: 600,
+    4: 500,
+    11: 60,
+    15: 75,
+}

@@ -12,7 +12,8 @@ if __name__ == '__main__':
     # jobs.check_resources(2620, 4002, 0, False) # Zeelandiae
     # app.graph()
     # get_resources(4001, datetime.now(), 0)
-    # jobs.send_telegram_update(2788, '@vn_resources', 0)
+    # jobs.send_telegram_update(2788, '@vn_resources', 'gold')
+    # jobs.send_telegram_update(2788, '@vn_uranium_resources', 'uranium')
     # sys.exit()
 
     JOBS = job_storage.get_jobs()
@@ -37,10 +38,21 @@ if __name__ == '__main__':
             minute=job['minutes']
         )
 
+    # VN gold
     SCHEDULER.add_job(
         jobs.send_telegram_update,
         'cron',
-        args=[2788, '@vn_resources', 0],
+        args=[2788, '@vn_resources', 'gold'],
+        id='send_telegram_update',
+        replace_existing=True,
+        minute='5'
+    )
+
+    # VN uranium
+    SCHEDULER.add_job(
+        jobs.send_telegram_update,
+        'cron',
+        args=[2788, '@vn_uranium_resources', 'uranium'],
         id='send_telegram_update',
         replace_existing=True,
         minute='5'

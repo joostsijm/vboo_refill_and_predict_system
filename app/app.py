@@ -11,7 +11,7 @@ from pandas.plotting import register_matplotlib_converters
 
 from telegram import ParseMode
 
-from app import LOGGER, SCHEDULER, TELEGRAM_BOT, jobs, api, database
+from app import LOGGER, SCHEDULER, TELEGRAM_BOT, RESOURCE_NAMES, jobs, api, database
 
 
 register_matplotlib_converters()
@@ -81,9 +81,12 @@ def max_refill_seconds(regions, limit, max_time):
             lowest_percentage = percentage
     return int(max_time / limit * lowest_percentage)
 
-def send_telegram_update(state_id, group_id, resource_type):
-    """Send mine update to telegram"""
-    message = database.get_work_percentage(state_id, resource_type, datetime.now(), 1, 1)
+def send_telegram_update(state_id, group_id, resource_name):
+    """Send resource update to telegram"""
+    date = datetime.now()
+    # date = datetime.today().replace(hour=18, minute=5) - timedelta(1)
+    resource_id = RESOURCE_NAMES[resource_name]
+    message = database.get_work_percentage(state_id, resource_id, date, 1, 1)
     if message:
         print(message)
         TELEGRAM_BOT.sendMessage(
