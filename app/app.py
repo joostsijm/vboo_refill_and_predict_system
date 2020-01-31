@@ -16,7 +16,7 @@ from app import LOGGER, SCHEDULER, TELEGRAM_BOT, RESOURCE_NAMES, jobs, api, data
 
 register_matplotlib_converters()
 
-def check_resources(state_id, capital_id, resource_id, do_refill):
+def check_resources(state_id, capital_id, resource_id, do_refill, alt):
     """Check resources and refill if necessary"""
     regions = api.download_resources(state_id, resource_id)
     print_resources(regions)
@@ -39,7 +39,7 @@ def check_resources(state_id, capital_id, resource_id, do_refill):
             SCHEDULER.add_job(
                 jobs.refill_resource,
                 'date',
-                args=[state_id, capital_id, resource_id],
+                args=[state_id, capital_id, resource_id, alt],
                 id=job_id,
                 run_date=scheduled_date
             )

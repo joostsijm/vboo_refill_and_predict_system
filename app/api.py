@@ -41,25 +41,28 @@ def parse_resources(html):
         }
     return regions
 
-def refill(state_id, capital_id, resource_id):
+def refill(state_id, capital_id, resource_id, alt):
     """Main function"""
     # Check location
-    response = requests.get(
-        '{}main/content'.format(BASE_URL),
-        headers=HEADERS
-    )
-    soup = BeautifulSoup(response.text, 'html.parser')
-    state_div = soup.find_all('div', {'class': 'index_case_50'})[1]
-    action = state_div.findChild()['action']
-    current_state_id = int(re.sub('.*/', '', action))
-    LOGGER.info('Current state %s', current_state_id)
+    # response = requests.get(
+    #     '{}main/content'.format(BASE_URL),
+    #     headers=HEADERS
+    # )
+    # soup = BeautifulSoup(response.text, 'html.parser')
+    # state_div = soup.find_all('div', {'class': 'index_case_50'})[1]
+    # action = state_div.findChild()['action']
+    # current_state_id = int(re.sub('.*/', '', action))
+    # LOGGER.info('Current state %s', current_state_id)
+
+    params = {}
+    # if current_state_id != state_id:
+    #     params['alt'] = True
+    if alt:
+        params['alt'] = True
 
     json_data = {
         'tmp_gov': resource_id
     }
-    params = {}
-    if current_state_id != state_id:
-        params['alt'] = True
 
     requests.post(
         '{}parliament/donew/42/{}/0'.format(BASE_URL, resource_id),
@@ -84,6 +87,7 @@ def refill(state_id, capital_id, resource_id):
         action = action.replace('law', 'votelaw')
         result = requests.post(
             '{}{}/pro'.format(BASE_URL, action),
+            params=params,
             headers=HEADERS
         )
         LOGGER.info('Response: %s', result.text)
