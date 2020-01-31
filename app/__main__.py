@@ -40,25 +40,8 @@ if __name__ == '__main__':
             minute=job['minutes']
         )
 
-    # VN gold
-    SCHEDULER.add_job(
-        jobs.send_telegram_update,
-        'cron',
-        args=[2788, '@vn_resources', 'gold'],
-        id='send_telegram_update',
-        replace_existing=True,
-        minute='5'
-    )
-
-    # VN uranium
-    SCHEDULER.add_job(
-        jobs.send_telegram_update,
-        'cron',
-        args=[2788, '@vn_uranium_resources', 'uranium'],
-        id='send_telegram_update',
-        replace_existing=True,
-        minute='5'
-    )
+    add_telegram_update_job(2788, '@vn_resources', 'gold')
+    add_telegram_update_job(2788, '@vn_uranium_resources', 'uranium')
 
     try:
         while True:
@@ -67,3 +50,14 @@ if __name__ == '__main__':
         LOGGER.info('Exiting application')
         SCHEDULER.shutdown()
         sys.exit()
+
+def add_telegram_update_job(state_id, telegram_id, resource_type):
+    """Add telegram update job"""
+    SCHEDULER.add_job(
+        jobs.send_telegram_update,
+        'cron',
+        args=[state_id, telegram_id, resource_type],
+        id='{}_send_telegram_update_{}'.format(state_id, resource_type),
+        replace_existing=True,
+        minute='5'
+    )
