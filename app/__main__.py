@@ -6,6 +6,17 @@ import sys
 from app import SCHEDULER, LOGGER, RESOURCE_NAMES, job_storage, jobs
 
 
+def add_telegram_update_job(state_id, telegram_id, resource_type):
+    """Add telegram update job"""
+    SCHEDULER.add_job(
+        jobs.send_telegram_update,
+        'cron',
+        args=[state_id, telegram_id, resource_type],
+        id='{}_send_telegram_update_{}'.format(state_id, resource_type),
+        replace_existing=True,
+        minute='5'
+    )
+
 if __name__ == '__main__':
     # jobs.refill_resource(3304, 2103, 0, True)
     # jobs.check_resources(2788, 4002, 0, True) # VN
@@ -50,14 +61,3 @@ if __name__ == '__main__':
         LOGGER.info('Exiting application')
         SCHEDULER.shutdown()
         sys.exit()
-
-def add_telegram_update_job(state_id, telegram_id, resource_type):
-    """Add telegram update job"""
-    SCHEDULER.add_job(
-        jobs.send_telegram_update,
-        'cron',
-        args=[state_id, telegram_id, resource_type],
-        id='{}_send_telegram_update_{}'.format(state_id, resource_type),
-        replace_existing=True,
-        minute='5'
-    )
