@@ -123,13 +123,21 @@ def get_work_percentage(state_id, resource_type, end_date_time, hours, times):
             seconds_left = time_left.seconds
         else:
             seconds_left = 86400
+        print(seconds_left)
         for region_id, stat in data[i]['stats'].items():
             if i+1 not in data or stat.region_id not in data[i+1]['stats']:
                 continue
             next_stat = data[i+1]['stats'][stat.region_id]
-            if seconds_left == 82800:
+            if seconds_left == 3600:
+                mined = next_stat.total() - stat.total()
+                required = stat.total() / (seconds_left / (hours * 3600))
+            elif seconds_left == 86400:
+                left = RESOURCE_MAX[resource_type] + next_stat.explored
+                mined = next_stat.total() - stat.total()
+                required = left / (seconds_left / (hours * 3600))
+            elif seconds_left == 82800:
                 mined = RESOURCE_MAX[resource_type] + next_stat.explored - stat.total()
-                required = next_stat.total() / (seconds_left / (hours * 3600))
+                required = stat.total() / (seconds_left / (hours * 3600))
             else:
                 mined = next_stat.total() - stat.total()
                 required = next_stat.total() / (seconds_left / (hours * 3600))
@@ -137,12 +145,14 @@ def get_work_percentage(state_id, resource_type, end_date_time, hours, times):
             if required != 0:
                 coefficient = 100 / RESOURCE_MAX[resource_type]
                 percentage = (mined / required - 1) * next_stat.total() * coefficient + 100
+            elif mined == 0:
+                percentage = 0
             else:
                 percentage = 100
             data[i]['progress'][stat.region_id] = percentage
-            # print('{:4} left: {:3} mined: {:3} required: {:6.2f} percentage: {:6.2f}'.format(
-            #     stat.region_id, next_stat.total(), mined, required, percentage
-            # ))
+            print('{:5} left: {:4} mined: {:4} required: {:6.2f} percentage: {:7.2f}'.format(
+                stat.region_id, stat.total(), mined, required, percentage
+            ))
 
     message_text = ''
     message_text += '{:15}: {:>8}\n'.format('region', 'workers')

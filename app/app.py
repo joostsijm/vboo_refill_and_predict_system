@@ -83,10 +83,27 @@ def max_refill_seconds(regions, limit, max_time):
 
 def send_telegram_update(state_id, group_id, resource_name):
     """Send resource update to telegram"""
-    date = datetime.now()
-    # date = datetime.today().replace(hour=18, minute=5) - timedelta(1)
     resource_id = RESOURCE_NAMES[resource_name]
+    # date = datetime.now()
+    date = datetime.today().replace(hour=17, minute=5) - timedelta(1)
+    print(date)
     message = database.get_work_percentage(state_id, resource_id, date, 1, 1)
+    date = datetime.today().replace(hour=18, minute=5) - timedelta(1)
+    print(date)
+    message = database.get_work_percentage(state_id, resource_id, date, 1, 1)
+    date = datetime.today().replace(hour=19, minute=5) - timedelta(1)
+    print(date)
+    message = database.get_work_percentage(state_id, resource_id, date, 1, 1)
+    date = datetime.today().replace(hour=20, minute=5) - timedelta(1)
+    print(date)
+    message = database.get_work_percentage(state_id, resource_id, date, 1, 1)
+    date = datetime.today().replace(hour=21, minute=5) - timedelta(1)
+    print(date)
+    message = database.get_work_percentage(state_id, resource_id, date, 1, 1)
+    date = datetime.today().replace(hour=22, minute=5) - timedelta(1)
+    print(date)
+    message = database.get_work_percentage(state_id, resource_id, date, 1, 1)
+    return
     if message:
         print(message)
         TELEGRAM_BOT.sendMessage(
