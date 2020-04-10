@@ -11,7 +11,8 @@ from pandas.plotting import register_matplotlib_converters
 
 from telegram import ParseMode
 
-from app import LOGGER, SCHEDULER, TELEGRAM_BOT, RESOURCE_NAMES, jobs, api, database
+from app import LOGGER, SCHEDULER, TELEGRAM_BOT, RESOURCE_NAMES, RESOURCE_IDS, RESOURCE_MAX, \
+    jobs, api, database
 
 
 register_matplotlib_converters()
@@ -19,7 +20,8 @@ register_matplotlib_converters()
 def check_resources(state_id, capital_id, resource_id, do_refill, alt):
     """Check resources and refill if necessary"""
     regions = api.download_resources(state_id, resource_id)
-    print_resources(regions)
+    LOGGER.info('state %6s: check resource %s', state_id, RESOURCE_IDS[resource_id])
+    print_resources(regions, resource_id)
     refill_percentage = 25
     database.save_resources(state_id, regions, resource_id)
     if do_refill and need_refill(regions, refill_percentage):
@@ -29,10 +31,8 @@ def check_resources(state_id, capital_id, resource_id, do_refill, alt):
         scheduled_date = datetime.now() + random_time_delta
         job_id = 'refill_{}_{}'.format(capital_id, resource_id)
         LOGGER.info(
-            'Refil resource %s at %s (%s minutes)',
-            resource_id,
-            scheduled_date,
-            round(random_time_delta.seconds / 60)
+            'state %s: refil resource %s at %s (%s minutes)', state_id, RESOURCE_IDS[resource_id],
+            scheduled_date, round(random_time_delta.seconds / 60)
         )
         job = SCHEDULER.get_job(job_id)
         if not job:
@@ -44,14 +44,14 @@ def check_resources(state_id, capital_id, resource_id, do_refill, alt):
                 run_date=scheduled_date
             )
 
-def print_resources(regions):
+def print_resources(regions, resource_id):
     """print resources"""
     if regions:
         print('region                        expl max   D left    c %    t %')
         for region in regions.values():
             region['explored_percentage'] = 100 / region['maximum'] * region['explored']
             region['total_left'] = region['explored'] + region['limit_left']
-            region['total_percentage'] = 100 / 2500 * region['total_left']
+            region['total_percentage'] = 100 / RESOURCE_MAX[resource_id] * region['total_left']
             print('{:25}: {:7.2f}{:4}{:4}{:5}{:7.2f}{:7.2f}'.format(
                 region['region_name'],
                 region['explored'],

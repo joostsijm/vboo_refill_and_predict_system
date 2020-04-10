@@ -20,8 +20,9 @@ def add_telegram_update_job(state_id, telegram_id, resource_type):
 if __name__ == '__main__':
     # jobs.refill_resource(3304, 4004, 0, True)
     # jobs.refill_resource(3261, 200062, 0, False)
-    # jobs.check_resources(2788, 4002, 0, True) # VN
-    # jobs.check_resources(2620, 4002, 0, False) # Zeelandiae
+    # jobs.check_resources(3304, 4004, 0, False, False) # VN
+    # jobs.check_resources(3304, 4004, 3, False, False) # VN
+    # jobs.check_resources(3304, 4004, 11, False, False) # VN
     # app.graph()
     # get_resources(4001, datetime.now(), 0)
     # jobs.send_telegram_update(2788, '@vn_resources', 'gold')

@@ -145,11 +145,11 @@ def get_work_percentage(state_id, resource_type, end_date_time, hours, times):
             # ))
 
     message_text = ''
-    message_text += '{:15}: {:>8}\n'.format('region', 'workers')
+    message_text += '{:17}: {:>8}\n'.format('region', 'workers')
     for date in data.values():
         if 'progress' in date:
             for region_id, progress in sorted(date['progress'].items(), key=lambda x: x[1]):
-                message_text += '{:15}: {:6.2f} %\n'.format(
+                message_text += '{:17}: {:6.2f} %\n'.format(
                     regions[region_id].replace('Netherlands', 'NL'),
                     progress
                 )
