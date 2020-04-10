@@ -151,7 +151,7 @@ def get_work_percentage(state_id, resource_type, end_date_time, hours, times):
                 percentage = 100
             data[i]['progress'][stat.region_id] = percentage
             print('{:5} left: {:4} mined: {:4} required: {:6.2f} percentage: {:7.2f}'.format(
-                stat.region_id, stat.total(), mined, required, percentage
+                stat.region_id, next_stat.total(), mined, required, percentage
             ))
 
     message_text = ''
