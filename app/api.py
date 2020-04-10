@@ -43,6 +43,8 @@ def parse_resources(html):
 
 def refill(state_id, capital_id, resource_id, alt):
     """Main function"""
+    resource_name = RESOURCE_IDS[resource_id]
+    LOGGER.info('state %6s: start refill for %s, alt: %s', state_id, resource_name, alt)
     # Check location
     # response = requests.get(
     #     '{}main/content'.format(BASE_URL),
@@ -70,6 +72,7 @@ def refill(state_id, capital_id, resource_id, alt):
         params=params,
         json=json_data
     )
+    LOGGER.info('state %6s: created exploration law for %s', state_id, resource_name)
 
     response = requests.get(
         '{}parliament/index/{}'.format(BASE_URL, capital_id),
@@ -77,13 +80,13 @@ def refill(state_id, capital_id, resource_id, alt):
     )
     soup = BeautifulSoup(response.text, 'html.parser')
     active_laws = soup.find('div', {'id': 'parliament_active_laws'})
-    resource_name = RESOURCE_IDS[resource_id]
     exploration_laws = active_laws.findAll(
         text='Resources exploration: state, {} resources'.format(resource_name)
     )
-    LOGGER.info('Resources exploration: state, %s resources', resource_name)
+    LOGGER.info('state %6s: number of exploration laws: %s', state_id, len(exploration_laws))
     for exploration_law in exploration_laws:
         action = exploration_law.parent.parent['action']
+        LOGGER.info('state %6s: vote for law: %s', state_id, action)
         action = action.replace('law', 'votelaw')
         result = requests.post(
             '{}{}/pro'.format(BASE_URL, action),

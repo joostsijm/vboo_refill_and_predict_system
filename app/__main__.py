@@ -18,7 +18,8 @@ def add_telegram_update_job(state_id, telegram_id, resource_type):
     )
 
 if __name__ == '__main__':
-    # jobs.refill_resource(3304, 2103, 0, True)
+    # jobs.refill_resource(3304, 4004, 0, True)
+    # jobs.refill_resource(3261, 200062, 0, False)
     # jobs.check_resources(2788, 4002, 0, True) # VN
     # jobs.check_resources(2620, 4002, 0, False) # Zeelandiae
     # app.graph()
