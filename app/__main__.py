@@ -53,8 +53,8 @@ if __name__ == '__main__':
             minute=job['minutes']
         )
 
-    add_telegram_update_job(2788, '@vn_resources', 'gold')
-    add_telegram_update_job(2788, '@vn_uranium_resources', 'uranium')
+    add_telegram_update_job(3304, '@vn_resources', 'gold')
+    add_telegram_update_job(3304, '@vn_uranium_resources', 'uranium')
 
     try:
         while True:
